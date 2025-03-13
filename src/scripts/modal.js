@@ -1,4 +1,5 @@
-import {formProfile, profileNameEl, profileDescriptionEl} from "../index.js"
+import {placesList, formNewPlace, formProfile, profileNameEl, profileDescriptionEl} from "../index.js"
+import { createCard, deleteCard } from "./cards.js";
 
 function openModal(modalWindow) {
   modalWindow.classList.add("popup_is-opened");
@@ -6,6 +7,8 @@ function openModal(modalWindow) {
   if (modalWindow.classList.contains("popup_type_edit")) {
     loadFormProfile(formProfile, profileNameEl.textContent, profileDescriptionEl.textContent);
     formProfile.addEventListener("submit", submitFormProfleToogle);
+  } else if (modalWindow.classList.contains("popup_type_new-card")) {
+    formNewPlace.addEventListener("submit", sumbitFormNewPlaceToogle);
   }
 }
 
@@ -37,6 +40,22 @@ function loadFormProfile(formProfile, profileName, profileDescription) {
 function submitFormProfile(formProfile) {
   profileNameEl.textContent = formProfile.elements.name.value;
   profileDescriptionEl.textContent = formProfile.elements.description.value;
+}
+
+function sumbitFormNewPlaceToogle(evt) {
+  evt.preventDefault();
+  sumbitFormNewPlace(formNewPlace);
+}
+
+function sumbitFormNewPlace(formNewPlace) {
+  const newCard = {
+    name: formNewPlace.elements["place-name"].value,
+    link: formNewPlace.elements.link.value
+  }
+  placesList.prepend(createCard(newCard, deleteCard));
+  formNewPlace.elements["place-name"].value = "";
+  formNewPlace.elements.link.value = "";
+  closeModal(document.querySelector(".popup_is-opened"));
 }
 
 export {openModal, closeModal, submitFormProfile}

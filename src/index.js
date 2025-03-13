@@ -16,7 +16,7 @@ const formNewPlace = document.forms["new-place"];
 let profileNameEl = document.querySelector(".profile__title");
 let profileDescriptionEl = document.querySelector(".profile__description");
 
-export {formProfile, profileNameEl, profileDescriptionEl}
+export {placesList, formNewPlace, formProfile, profileNameEl, profileDescriptionEl}
 
 initialCards.forEach(function (item) {
   placesList.append(createCard(item, deleteCard));

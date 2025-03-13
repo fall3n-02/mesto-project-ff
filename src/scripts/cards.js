@@ -34,13 +34,13 @@ function deleteCard(item) {
   });
 }
 
-function createCard(initialCard, deleteCard) {
+function createCard(card, deleteCard) {
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
 
-  cardElement.querySelector(".card__image").src = initialCard.link;
-  cardElement.querySelector(".card__image").alt = initialCard.name;
-  cardElement.querySelector(".card__title").textContent = initialCard.name;
+  cardElement.querySelector(".card__image").src = card.link;
+  cardElement.querySelector(".card__image").alt = card.name;
+  cardElement.querySelector(".card__title").textContent = card.name;
 
   deleteCard(cardElement);
 
