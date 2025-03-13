@@ -11,6 +11,12 @@ const buttonOpenNewPlace = document.querySelector(".profile__add-button");
 const buttonOpenImage = '';
 const popupList = document.querySelectorAll(".popup");
 const cardList = document.querySelectorAll(".card");
+const formProfile = document.forms["edit-profile"];
+const formNewPlace = document.forms["new-place"];
+let profileNameEl = document.querySelector(".profile__title");
+let profileDescriptionEl = document.querySelector(".profile__description");
+
+export {formProfile, profileNameEl, profileDescriptionEl}
 
 initialCards.forEach(function (item) {
   placesList.append(createCard(item, deleteCard));
