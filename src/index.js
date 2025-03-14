@@ -1,22 +1,24 @@
 import "./index.css";
-import {deleteCard, createCard, initialCards} from "./scripts/cards.js"
-import {openModal, closeModal} from "./scripts/modal.js"
+import { initialCards } from "./scripts/cards.js";
+import {deleteCard, createCard} from "./scripts/card.js"
+import {openModal, closeModal, submitFormProfile, openPopupImage} from "./scripts/modal.js"
 
-const placesList = document.querySelector(".places__list");
 const popupEditProfile = document.querySelector(".popup_type_edit");
 const popupNewPlace = document.querySelector(".popup_type_new-card");
 const popupImage = document.querySelector(".popup_type_image");
+
 const buttonOpenEditProfile = document.querySelector(".profile__edit-button");
 const buttonOpenNewPlace = document.querySelector(".profile__add-button");
-const buttonOpenImage = '';
+
+const placesList = document.querySelector(".places__list");
 const popupList = document.querySelectorAll(".popup");
-const cardList = document.querySelectorAll(".card");
+
 const formProfile = document.forms["edit-profile"];
 const formNewPlace = document.forms["new-place"];
 let profileNameEl = document.querySelector(".profile__title");
 let profileDescriptionEl = document.querySelector(".profile__description");
 
-export {placesList, formNewPlace, formProfile, profileNameEl, profileDescriptionEl}
+export {placesList, formNewPlace, formProfile, profileNameEl, profileDescriptionEl, popupImage}
 
 initialCards.forEach(function (item) {
   placesList.append(createCard(item, deleteCard));
@@ -31,12 +33,4 @@ popupList.forEach(function(popup) {
       closeModal(popup);
     } 
   }); 
-});
-
-cardList.forEach(function(card) {
-  card.addEventListener("click", function(evt) {
-    if (evt.target.classList.contains("card__image")) {
-      openModal();
-    }
-  });
 });

@@ -25,26 +25,4 @@ const initialCards = [
     }
 ];
 
-function deleteCard(item) {
-  const deleteButton = item.querySelector(".card__delete-button");
-  
-  deleteButton.addEventListener("click", function () {
-    const cardToDelete = item.closest(".card");
-    cardToDelete.remove();
-  });
-}
-
-function createCard(card, deleteCard) {
-  const cardTemplate = document.querySelector("#card-template").content;
-  const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
-
-  cardElement.querySelector(".card__image").src = card.link;
-  cardElement.querySelector(".card__image").alt = card.name;
-  cardElement.querySelector(".card__title").textContent = card.name;
-
-  deleteCard(cardElement);
-
-  return cardElement;
-}
-
-export {deleteCard, createCard, initialCards}
+export {initialCards}

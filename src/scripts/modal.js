@@ -1,22 +1,24 @@
-import {placesList, formNewPlace, formProfile, profileNameEl, profileDescriptionEl} from "../index.js"
-import { createCard, deleteCard } from "./cards.js";
+import {placesList, formNewPlace, formProfile, profileNameEl, profileDescriptionEl, popupImage} from "../index.js"
+import { createCard, deleteCard } from "./card.js";
 
-function openModal(modalWindow) {
-  modalWindow.classList.add("popup_is-opened");
+function openModal(popup) {
+  popup.classList.add("popup_is-opened");
   document.addEventListener("keydown", closeModalWithEsc);
-  if (modalWindow.classList.contains("popup_type_edit")) {
+  if (popup.classList.contains("popup_type_edit")) {
     loadFormProfile(formProfile, profileNameEl.textContent, profileDescriptionEl.textContent);
     formProfile.addEventListener("submit", submitFormProfleToogle);
-  } else if (modalWindow.classList.contains("popup_type_new-card")) {
+  } else if (popup.classList.contains("popup_type_new-card")) {
     formNewPlace.addEventListener("submit", sumbitFormNewPlaceToogle);
+  } else if (popup.classList.contains("popup_type_image")) {
+    
   }
 }
 
-function closeModal(modalWindow) {
-  modalWindow.classList.remove("popup_is-opened");
+function closeModal(popup) {
+  popup.classList.remove("popup_is-opened");
   document.removeEventListener("keydown", closeModalWithEsc);
-  if (modalWindow.classList.contains("popup_type_edit")) {
-    formProfile.removeEventListener("submit", submitFormProfleToogle)
+  if (popup.classList.contains("popup_type_edit")) {
+    formProfile.removeEventListener("submit", submitFormProfleToogle);
   }
 }
 
@@ -58,4 +60,11 @@ function sumbitFormNewPlace(formNewPlace) {
   closeModal(document.querySelector(".popup_is-opened"));
 }
 
-export {openModal, closeModal, submitFormProfile}
+function openPopupImage(evt) {
+  openModal(popupImage)
+  popupImage.querySelector(".popup__image").src = evt.target.src;
+  popupImage.querySelector(".popup__image").alt = evt.target.alt;
+  popupImage.querySelector(".popup__caption").textContent = evt.target.alt;
+}
+
+export {openModal, closeModal, submitFormProfile, openPopupImage}
