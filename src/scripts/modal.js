@@ -1,5 +1,5 @@
-import {placesList, formNewPlace, formProfile, profileNameEl, profileDescriptionEl, popupImage} from "../index.js"
-import {createCard, deleteCard} from "./card.js";
+import { placesList, formNewPlace, formProfile, profileNameEl, profileDescriptionEl, popupImage } from "../index.js"
+import { createCard, deleteCard } from "./card.js";
 
 function openModal(popup) {
   popup.classList.add("popup_is-opened");
@@ -10,7 +10,7 @@ function openModal(popup) {
   } else if (popup.classList.contains("popup_type_new-card")) {
     formNewPlace.addEventListener("submit", sumbitFormNewPlace);
   } else if (popup.classList.contains("popup_type_image")) {
-    
+
   }
 }
 
@@ -28,7 +28,7 @@ function closeModalWithEsc(evt) {
   }
 }
 
-function submitFormProfle(evt) { 
+function submitFormProfle(evt) {
   evt.preventDefault();
   uploadFormProfile(formProfile);
   closeModal(document.querySelector(".popup_is-opened"));
@@ -63,4 +63,4 @@ function openPopupImage(evt) {
   popupImage.querySelector(".popup__caption").textContent = evt.target.alt;
 }
 
-export {openModal, closeModal, openPopupImage}
+export { openModal, closeModal, openPopupImage }

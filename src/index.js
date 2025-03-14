@@ -1,7 +1,7 @@
 import "./index.css";
-import {initialCards} from "./scripts/cards.js";
-import {deleteCard, createCard} from "./scripts/card.js"
-import {openModal, closeModal} from "./scripts/modal.js"
+import { initialCards } from "./scripts/cards.js";
+import { deleteCard, createCard } from "./scripts/card.js"
+import { openModal, closeModal } from "./scripts/modal.js"
 
 const popupEditProfile = document.querySelector(".popup_type_edit");
 const popupNewPlace = document.querySelector(".popup_type_new-card");
@@ -18,7 +18,7 @@ const formNewPlace = document.forms["new-place"];
 let profileNameEl = document.querySelector(".profile__title");
 let profileDescriptionEl = document.querySelector(".profile__description");
 
-export {placesList, formNewPlace, formProfile, profileNameEl, profileDescriptionEl, popupImage}
+export { placesList, formNewPlace, formProfile, profileNameEl, profileDescriptionEl, popupImage }
 
 initialCards.forEach(function (item) {
   placesList.append(createCard(item, deleteCard));
@@ -27,10 +27,10 @@ initialCards.forEach(function (item) {
 buttonOpenEditProfile.addEventListener("click", () => openModal(popupEditProfile));
 buttonOpenNewPlace.addEventListener("click", () => openModal(popupNewPlace));
 
-popupList.forEach(function(popup) {
-  popup.addEventListener("click", function(evt) {
-    if ((evt.target.classList.contains("popup__close")) || (evt.target.classList.contains("popup"))){
+popupList.forEach(function (popup) {
+  popup.addEventListener("click", function (evt) {
+    if ((evt.target.classList.contains("popup__close")) || (evt.target.classList.contains("popup"))) {
       closeModal(popup);
-    } 
-  }); 
+    }
+  });
 });

@@ -1,8 +1,8 @@
-import {openPopupImage} from "./modal";
+import { openPopupImage } from "./modal";
 
 function deleteCard(item) {
   const deleteButton = item.querySelector(".card__delete-button");
-  
+
   deleteButton.addEventListener("click", function () {
     const cardToDelete = item.closest(".card");
     cardToDelete.remove();
@@ -26,7 +26,6 @@ function createCard(card, deleteCard) {
 }
 
 function likeToogle(evt) {
-  console.log(evt.target);
   if (evt.target.classList.contains("card__like-button_is-active")) {
     evt.target.classList.remove("card__like-button_is-active");
   } else {
@@ -34,4 +33,4 @@ function likeToogle(evt) {
   }
 }
 
-export {deleteCard, createCard}
+export { deleteCard, createCard }
