@@ -1,7 +1,7 @@
 import "./index.css";
-import { initialCards } from "./scripts/cards.js";
+import {initialCards} from "./scripts/cards.js";
 import {deleteCard, createCard} from "./scripts/card.js"
-import {openModal, closeModal, submitFormProfile, openPopupImage} from "./scripts/modal.js"
+import {openModal, closeModal} from "./scripts/modal.js"
 
 const popupEditProfile = document.querySelector(".popup_type_edit");
 const popupNewPlace = document.querySelector(".popup_type_new-card");

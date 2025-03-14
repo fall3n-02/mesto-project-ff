@@ -1,4 +1,4 @@
-import { openPopupImage } from "./modal";
+import {openPopupImage} from "./modal";
 
 function deleteCard(item) {
   const deleteButton = item.querySelector(".card__delete-button");

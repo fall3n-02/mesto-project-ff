@@ -1,14 +1,14 @@
 import {placesList, formNewPlace, formProfile, profileNameEl, profileDescriptionEl, popupImage} from "../index.js"
-import { createCard, deleteCard } from "./card.js";
+import {createCard, deleteCard} from "./card.js";
 
 function openModal(popup) {
   popup.classList.add("popup_is-opened");
   document.addEventListener("keydown", closeModalWithEsc);
   if (popup.classList.contains("popup_type_edit")) {
     loadFormProfile(formProfile, profileNameEl.textContent, profileDescriptionEl.textContent);
-    formProfile.addEventListener("submit", submitFormProfleToogle);
+    formProfile.addEventListener("submit", submitFormProfle);
   } else if (popup.classList.contains("popup_type_new-card")) {
-    formNewPlace.addEventListener("submit", sumbitFormNewPlaceToogle);
+    formNewPlace.addEventListener("submit", sumbitFormNewPlace);
   } else if (popup.classList.contains("popup_type_image")) {
     
   }
@@ -18,7 +18,7 @@ function closeModal(popup) {
   popup.classList.remove("popup_is-opened");
   document.removeEventListener("keydown", closeModalWithEsc);
   if (popup.classList.contains("popup_type_edit")) {
-    formProfile.removeEventListener("submit", submitFormProfleToogle);
+    formProfile.removeEventListener("submit", submitFormProfle);
   }
 }
 
@@ -28,9 +28,9 @@ function closeModalWithEsc(evt) {
   }
 }
 
-function submitFormProfleToogle(evt) { 
+function submitFormProfle(evt) { 
   evt.preventDefault();
-  submitFormProfile(formProfile);
+  uploadFormProfile(formProfile);
   closeModal(document.querySelector(".popup_is-opened"));
 }
 
@@ -39,17 +39,13 @@ function loadFormProfile(formProfile, profileName, profileDescription) {
   formProfile.elements.description.value = profileDescription;
 }
 
-function submitFormProfile(formProfile) {
+function uploadFormProfile(formProfile) {
   profileNameEl.textContent = formProfile.elements.name.value;
   profileDescriptionEl.textContent = formProfile.elements.description.value;
 }
 
-function sumbitFormNewPlaceToogle(evt) {
+function sumbitFormNewPlace(evt) {
   evt.preventDefault();
-  sumbitFormNewPlace(formNewPlace);
-}
-
-function sumbitFormNewPlace(formNewPlace) {
   const newCard = {
     name: formNewPlace.elements["place-name"].value,
     link: formNewPlace.elements.link.value
@@ -67,4 +63,4 @@ function openPopupImage(evt) {
   popupImage.querySelector(".popup__caption").textContent = evt.target.alt;
 }
 
-export {openModal, closeModal, submitFormProfile, openPopupImage}
+export {openModal, closeModal, openPopupImage}
