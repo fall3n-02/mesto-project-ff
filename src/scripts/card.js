@@ -1,36 +1,33 @@
-import { openPopupImage } from "./modal";
-
-function deleteCard(item) {
-  const deleteButton = item.querySelector(".card__delete-button");
-
-  deleteButton.addEventListener("click", function () {
-    const cardToDelete = item.closest(".card");
-    cardToDelete.remove();
-  });
-}
-
-function createCard(card, deleteCard) {
+function createCard(card, deleteCard, likeToogle, openPopupImage) {
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
+  const buttonDelete = cardElement.querySelector(".card__delete-button");
+  const buttonLike = cardElement.querySelector(".card__like-button")
+  const cardImage = cardElement.querySelector(".card__image");
+  const cardTitle = cardElement.querySelector(".card__title")
 
-  cardElement.querySelector(".card__image").src = card.link;
-  cardElement.querySelector(".card__image").alt = card.name;
-  cardElement.querySelector(".card__title").textContent = card.name;
+  cardImage.src = card.link;
+  cardImage.alt = card.name;
+  cardTitle.textContent = card.name;
 
-  cardElement.querySelector(".card__like-button").addEventListener("click", likeToogle);
-  cardElement.querySelector(".card__image").addEventListener("click", openPopupImage);
-
-  deleteCard(cardElement);
+  buttonLike.addEventListener("click", (evt) => likeToogle(evt.currentTarget));
+  cardImage.addEventListener("click", (evt) => openPopupImage(evt.target));
+  buttonDelete.addEventListener("click", () => deleteCard(cardElement));
 
   return cardElement;
 }
 
-function likeToogle(evt) {
-  if (evt.target.classList.contains("card__like-button_is-active")) {
-    evt.target.classList.remove("card__like-button_is-active");
+function deleteCard(cardElement) {
+  const cardToRemove = cardElement.closest(".card");
+  cardToRemove.remove();
+}
+
+function likeToogle(buttonLike) {
+  if (buttonLike.classList.contains("card__like-button_is-active")) {
+    buttonLike.classList.remove("card__like-button_is-active");
   } else {
-    evt.target.classList.add("card__like-button_is-active");
+    buttonLike.classList.add("card__like-button_is-active");
   }
 }
 
-export { deleteCard, createCard }
+export { deleteCard, createCard, likeToogle }

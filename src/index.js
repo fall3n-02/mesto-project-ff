@@ -1,11 +1,14 @@
 import "./index.css";
 import { initialCards } from "./scripts/cards.js";
-import { deleteCard, createCard } from "./scripts/card.js"
+import { deleteCard, createCard, likeToogle } from "./scripts/card.js"
 import { openModal, closeModal } from "./scripts/modal.js"
 
 const popupEditProfile = document.querySelector(".popup_type_edit");
 const popupNewPlace = document.querySelector(".popup_type_new-card");
 const popupImage = document.querySelector(".popup_type_image");
+
+const popupImageImage = popupImage.querySelector(".popup__image");
+const popupImageDescription = popupImage.querySelector(".popup__caption");
 
 const buttonOpenEditProfile = document.querySelector(".profile__edit-button");
 const buttonOpenNewPlace = document.querySelector(".profile__add-button");
@@ -15,16 +18,17 @@ const popupList = document.querySelectorAll(".popup");
 
 const formProfile = document.forms["edit-profile"];
 const formNewPlace = document.forms["new-place"];
-let profileNameEl = document.querySelector(".profile__title");
-let profileDescriptionEl = document.querySelector(".profile__description");
+const profileNameEl = document.querySelector(".profile__title");
+const profileDescriptionEl = document.querySelector(".profile__description");
 
-export { placesList, formNewPlace, formProfile, profileNameEl, profileDescriptionEl, popupImage }
-
-initialCards.forEach(function (item) {
-  placesList.append(createCard(item, deleteCard));
+initialCards.forEach(function (card) {
+  placesList.append(createCard(card, deleteCard, likeToogle, openPopupImage));
 });
 
-buttonOpenEditProfile.addEventListener("click", () => openModal(popupEditProfile));
+buttonOpenEditProfile.addEventListener("click", () => {
+  loadFormProfile(popupEditProfile);
+  openModal(popupEditProfile);
+});
 buttonOpenNewPlace.addEventListener("click", () => openModal(popupNewPlace));
 
 popupList.forEach(function (popup) {
@@ -34,3 +38,41 @@ popupList.forEach(function (popup) {
     }
   });
 });
+
+formProfile.addEventListener("submit", submitFormProfle);
+formNewPlace.addEventListener("submit", sumbitFormNewPlace);
+
+function submitFormProfle(evt) {
+  evt.preventDefault();
+  uploadFormProfile(formProfile);
+  formProfile.removeEventListener("click", submitFormProfle);
+  closeModal(popupEditProfile);
+}
+
+function loadFormProfile() {
+  formProfile.elements.name.value = profileNameEl.textContent;
+  formProfile.elements.description.value = profileDescriptionEl.textContent;
+}
+
+function uploadFormProfile(formProfile) {
+  profileNameEl.textContent = formProfile.elements.name.value;
+  profileDescriptionEl.textContent = formProfile.elements.description.value;
+}
+
+function sumbitFormNewPlace(evt) {
+  evt.preventDefault();
+  const newCard = {
+    name: formNewPlace.elements["place-name"].value,
+    link: formNewPlace.elements.link.value
+  }
+  placesList.prepend(createCard(newCard, deleteCard, likeToogle, openPopupImage));
+  formNewPlace.reset();
+  closeModal(popupNewPlace);
+}
+
+function openPopupImage(cardImage) {
+  openModal(popupImage);
+  popupImageImage.src = cardImage.src;
+  popupImageImage.alt = cardImage.alt;
+  popupImageDescription.textContent = cardImage.alt;
+}
