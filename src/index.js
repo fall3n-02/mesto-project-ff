@@ -45,7 +45,6 @@ formNewPlace.addEventListener("submit", sumbitFormNewPlace);
 function submitFormProfle(evt) {
   evt.preventDefault();
   uploadFormProfile(formProfile);
-  formProfile.removeEventListener("click", submitFormProfle);
   closeModal(popupEditProfile);
 }
 
