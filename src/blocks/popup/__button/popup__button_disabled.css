@@ -1,4 +1,4 @@
-button.popup__button.popup__button-is-inactive {
+button.popup__button.popup__button_disabled {
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 2px;
   color: rgba(0, 0, 0, 0.15);

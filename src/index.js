@@ -2,7 +2,7 @@ import "./index.css";
 import { initialCards } from "./scripts/cards.js";
 import { deleteCard, createCard, likeToogle } from "./scripts/card.js"
 import { openModal, closeModal } from "./scripts/modal.js"
-import { enableValidation, resetValidation } from "./scripts/validation.js";
+import { enableValidation, clearValidation } from "./scripts/validation.js";
 
 const popupEditProfile = document.querySelector(".popup_type_edit");
 const popupNewPlace = document.querySelector(".popup_type_new-card");
@@ -22,10 +22,20 @@ const formNewPlace = document.forms["new-place"];
 const profileNameEl = document.querySelector(".profile__title");
 const profileDescriptionEl = document.querySelector(".profile__description");
 
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+};
+
 function submitFormProfle(evt) {
   evt.preventDefault();
   uploadFormProfile(formProfile);
   closeModal(popupEditProfile);
+  clearValidation(validationConfig, formProfile);
 }
 
 function loadFormProfile() {
@@ -47,6 +57,7 @@ function sumbitFormNewPlace(evt) {
   placesList.prepend(createCard(newCard, deleteCard, likeToogle, openPopupImage));
   formNewPlace.reset();
   closeModal(popupNewPlace);
+  clearValidation(validationConfig, formNewPlace)
 }
 
 function openPopupImage(cardImage) {
@@ -63,18 +74,22 @@ initialCards.forEach(function (card) {
 buttonOpenEditProfile.addEventListener("click", () => {
   loadFormProfile(popupEditProfile);
   openModal(popupEditProfile);
+  clearValidation(validationConfig, formProfile);
 });
+
 buttonOpenNewPlace.addEventListener("click", () => {
   openModal(popupNewPlace);
-  resetValidation(formNewPlace);
+  clearValidation(validationConfig, formNewPlace);
 });
 
 popups.forEach(function (popup) {
   popup.addEventListener("click", function (evt) {
     if ((evt.target.classList.contains("popup__close")) || (evt.target.classList.contains("popup"))) {
-      const form = popup.querySelector(".popup__form");
       closeModal(popup);
-      resetValidation(form);
+      if (popup.classList.contains(".popup__form")) {
+        const form = popup.querySelector(".popup__form");
+        clearValidation(validationConfig, form)
+      }
     }
   });
 });
@@ -82,4 +97,4 @@ popups.forEach(function (popup) {
 formProfile.addEventListener("submit", submitFormProfle);
 formNewPlace.addEventListener("submit", sumbitFormNewPlace);
 
-enableValidation();
+enableValidation(validationConfig); 

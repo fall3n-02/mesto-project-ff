@@ -1,4 +1,4 @@
-@import url("./popup__button-is-inactive.css");
+@import url("./popup__button_disabled.css");
 
 .popup__button {
   width: 100%;
