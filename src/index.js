@@ -1,12 +1,13 @@
 import "./index.css";
-import { initialCards } from "./scripts/cards.js";
 import { deleteCard, createCard, likeToogle } from "./scripts/card.js"
 import { openModal, closeModal } from "./scripts/modal.js"
 import { enableValidation, clearValidation } from "./scripts/validation.js";
+import { getInitialCards, getProfileInfo, setProfileInfo, addNewCard } from "./scripts/api.js";
 
 const popupEditProfile = document.querySelector(".popup_type_edit");
 const popupNewPlace = document.querySelector(".popup_type_new-card");
 const popupImage = document.querySelector(".popup_type_image");
+const popupConfirm = document.querySelector(".popup_type_confirm");
 
 const popupImageImage = popupImage.querySelector(".popup__image");
 const popupImageDescription = popupImage.querySelector(".popup__caption");
@@ -21,6 +22,7 @@ const formProfile = document.forms["edit-profile"];
 const formNewPlace = document.forms["new-place"];
 const profileNameEl = document.querySelector(".profile__title");
 const profileDescriptionEl = document.querySelector(".profile__description");
+const profileImage = document.querySelector(".profile__image");
 
 const validationConfig = {
   formSelector: '.popup__form',
@@ -34,6 +36,10 @@ const validationConfig = {
 function submitFormProfle(evt) {
   evt.preventDefault();
   uploadFormProfile(formProfile);
+  setProfileInfo({
+    name: profileNameEl.textContent,
+    about: profileDescriptionEl.textContent
+  })
   closeModal(popupEditProfile);
   clearValidation(validationConfig, formProfile);
 }
@@ -54,7 +60,8 @@ function sumbitFormNewPlace(evt) {
     name: formNewPlace.elements["place-name"].value,
     link: formNewPlace.elements.link.value
   }
-  placesList.prepend(createCard(newCard, deleteCard, likeToogle, openPopupImage));
+  placesList.prepend(createCard(newCard, deleteCard, likeToogle, openPopupImage, true));
+  addNewCard(newCard);
   formNewPlace.reset();
   closeModal(popupNewPlace);
   clearValidation(validationConfig, formNewPlace)
@@ -67,9 +74,27 @@ function openPopupImage(cardImage) {
   popupImageDescription.textContent = cardImage.alt;
 }
 
-initialCards.forEach(function (card) {
-  placesList.append(createCard(card, deleteCard, likeToogle, openPopupImage));
-});
+Promise.all([getProfileInfo(), getInitialCards()])
+  .then(([profileInfo, cards]) => {
+    profileNameEl.textContent = profileInfo.name;
+    profileDescriptionEl.textContent = profileInfo.about;
+    profileImage.src = profileInfo.avatar;
+    cards.forEach((card) => {
+      const isCreatedByMyself = profileInfo._id === card.owner._id;
+      placesList.prepend(createCard(card, deleteCard, likeToogle, openPopupImage, isCreatedByMyself));
+    })
+  })
+
+function showConfirmPopup(popup, card) {
+  openModal(popup);
+
+  const confirmButton = popup.querySelector(".confirm_button");
+
+  confirmButton.addEventListener("click", (evt) => {
+    deleteCard(card);
+    closeModal(popup);
+  });
+}
 
 buttonOpenEditProfile.addEventListener("click", () => {
   loadFormProfile(popupEditProfile);

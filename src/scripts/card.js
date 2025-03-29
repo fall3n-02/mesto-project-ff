@@ -1,14 +1,21 @@
-function createCard(card, deleteCard, likeToogle, openPopupImage) {
+function createCard(card, deleteCard, likeToogle, openPopupImage, isCreatedByMyself) {
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const buttonDelete = cardElement.querySelector(".card__delete-button");
   const buttonLike = cardElement.querySelector(".card__like-button")
   const cardImage = cardElement.querySelector(".card__image");
   const cardTitle = cardElement.querySelector(".card__title")
+  const cardLikeCount = cardElement.querySelector(".card__like-count")
 
   cardImage.src = card.link;
   cardImage.alt = card.name;
   cardTitle.textContent = card.name;
+  cardLikeCount.textContent = card.likes.length;
+
+  if (!isCreatedByMyself) {
+    buttonDelete.disabled = true;
+    buttonDelete.classList.add("visually-hidden");
+  }
 
   buttonLike.addEventListener("click", (evt) => likeToogle(evt.currentTarget));
   cardImage.addEventListener("click", (evt) => openPopupImage(evt.target));
