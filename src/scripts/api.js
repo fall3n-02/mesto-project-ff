@@ -56,14 +56,39 @@ function addNewCard(data) {
 } 
 
 function likeCard(data) {
-  return fetch(`https://nomoreparties.co/v1/cohortId/cards/likes/${data._id}`, {
+  return fetch(`https://nomoreparties.co/v1/wff-cohort-35/cards/likes/${data._id}`, {
     method: 'PUT',
     headers: {
-      authorization: '2c41fd0f-ee02-4fdc-a11f-a842e627ead5',
-      'Content-Type': 'application/json'
+      authorization: '2c41fd0f-ee02-4fdc-a11f-a842e627ead5'
     }
   })
     .then(handleResponse);
 }
 
-export { getInitialCards, getProfileInfo, setProfileInfo, addNewCard, likeCard}
+function removeLikeFromCard(data) {
+  return fetch(`https://nomoreparties.co/v1/wff-cohort-35/cards/likes/${data._id}`, {
+    method: 'DELETE',
+    headers: {
+      authorization: '2c41fd0f-ee02-4fdc-a11f-a842e627ead5'
+    }
+  })
+    .then(handleResponse);
+}
+
+function deleteCardFromList(data) {
+  return fetch(`https://nomoreparties.co/v1/wff-cohort-35/cards/${data._id}`, {
+    method: "DELETE",
+    headers: {
+      authorization: '2c41fd0f-ee02-4fdc-a11f-a842e627ead5'
+    }
+  })
+}
+
+export { getInitialCards, 
+  getProfileInfo, 
+  setProfileInfo, 
+  addNewCard, 
+  likeCard,
+  removeLikeFromCard,
+  deleteCardFromList
+}

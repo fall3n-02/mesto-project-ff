@@ -1,4 +1,4 @@
-function createCard(card, deleteCard, likeToogle, openPopupImage, isCreatedByMyself) {
+function createCard(card, deleteCard, likeToogle, openPopupImage, isCreatedByMyself, deleteCardFromList, likeCard, removeLikeFromCard) {
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const buttonDelete = cardElement.querySelector(".card__delete-button");
@@ -10,16 +10,35 @@ function createCard(card, deleteCard, likeToogle, openPopupImage, isCreatedByMys
   cardImage.src = card.link;
   cardImage.alt = card.name;
   cardTitle.textContent = card.name;
-  cardLikeCount.textContent = card.likes.length;
+  refreshLikes(card, cardLikeCount);
 
   if (!isCreatedByMyself) {
     buttonDelete.disabled = true;
     buttonDelete.classList.add("visually-hidden");
   }
 
-  buttonLike.addEventListener("click", (evt) => likeToogle(evt.currentTarget));
+  buttonLike.addEventListener("click", (evt) => {
+    likeToogle(evt.target);
+    if (buttonLike.classList.contains("card__like-button_is-active")) {
+      likeCard(card)
+        .then((res) => {
+          refreshLikes(res, cardLikeCount);
+        });
+    } else {
+      removeLikeFromCard(card)
+        .then((res) => {
+          refreshLikes(res, cardLikeCount);
+        })
+    }
+
+  });
+
   cardImage.addEventListener("click", (evt) => openPopupImage(evt.target));
-  buttonDelete.addEventListener("click", () => deleteCard(cardElement));
+
+  buttonDelete.addEventListener("click", () => {
+    deleteCardFromList(card);
+    deleteCard(cardElement);
+  });
 
   return cardElement;
 }
@@ -35,6 +54,10 @@ function likeToogle(buttonLike) {
   } else {
     buttonLike.classList.add("card__like-button_is-active");
   }
+}
+
+function refreshLikes(card, cardLikeCount) {
+  cardLikeCount.textContent = card.likes.length;
 }
 
 export { deleteCard, createCard, likeToogle }
