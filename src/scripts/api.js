@@ -1,19 +1,15 @@
 function getProfileInfo() {
-  return fetch('https://nomoreparties.co/v1/wff-cohort-35/users/me', {
+  return fetch(`${apiConfig.url}users/me`, {
     method: "GET",
-    headers: {
-      authorization: '2c41fd0f-ee02-4fdc-a11f-a842e627ead5'
-    }
+    headers: apiConfig.headers
   })
     .then(handleResponse);
 }
 
 function getInitialCards() {
-  return fetch('https://nomoreparties.co/v1/wff-cohort-35/cards', {
+  return fetch(`${apiConfig.url}cards`, {
     method: "GET",
-    headers: {
-      authorization: '2c41fd0f-ee02-4fdc-a11f-a842e627ead5'
-    }
+    headers: apiConfig.headers
   })
     .then(handleResponse);
 }
@@ -26,12 +22,9 @@ function handleResponse(response) {
 }
 
 function setProfileInfo(data) {
-  return fetch('https://nomoreparties.co/v1/wff-cohort-35/users/me', {
+  return fetch(`${apiConfig.url}users/me`, {
     method: 'PATCH',
-    headers: {
-      authorization: '2c41fd0f-ee02-4fdc-a11f-a842e627ead5',
-      'Content-Type': 'application/json'
-    },
+    headers: apiConfig.headers,
     body: JSON.stringify({
       name: data.name,
       about: data.about
@@ -41,12 +34,9 @@ function setProfileInfo(data) {
 }
 
 function addNewCard(data) {
-  return fetch('https://nomoreparties.co/v1/wff-cohort-35/cards', {
+  return fetch(`${apiConfig.url}cards`, {
     method: 'POST',
-    headers: {
-      authorization: '2c41fd0f-ee02-4fdc-a11f-a842e627ead5',
-      'Content-Type': 'application/json'
-    },
+    headers: apiConfig.headers,
     body: JSON.stringify({
       name: data.name,
       link: data.link,
@@ -57,47 +47,46 @@ function addNewCard(data) {
 } 
 
 function likeCard(data) {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-35/cards/likes/${data._id}`, {
+  return fetch(`${apiConfig.url}cards/likes/${data._id}`, {
     method: 'PUT',
-    headers: {
-      authorization: '2c41fd0f-ee02-4fdc-a11f-a842e627ead5'
-    }
+    headers: apiConfig.headers
   })
     .then(handleResponse);
 }
 
 function removeLikeFromCard(data) {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-35/cards/likes/${data._id}`, {
+  return fetch(`${apiConfig.url}cards/likes/${data._id}`, {
     method: 'DELETE',
-    headers: {
-      authorization: '2c41fd0f-ee02-4fdc-a11f-a842e627ead5'
-    }
+    headers: apiConfig.headers
   })
     .then(handleResponse);
 }
 
 function deleteCardFromList(data) {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-35/cards/${data._id}`, {
+  return fetch(`${apiConfig.url}cards/${data._id}`, {
     method: "DELETE",
-    headers: {
-      authorization: '2c41fd0f-ee02-4fdc-a11f-a842e627ead5'
-    }
+    headers: apiConfig.headers
   })
     .then(handleResponse);
 }
 
 function changeAvatar(data) {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-35/users/me/avatar`, {
+  return fetch(`${apiConfig.url}users/me/avatar`, {
     method: "PATCH",
-    headers: {
-      authorization: '2c41fd0f-ee02-4fdc-a11f-a842e627ead5',
-      'Content-Type': 'application/json'
-    },
+    headers: apiConfig.headers,
     body: JSON.stringify({
       avatar: data
     })
   })
     .then(handleResponse);
+}
+
+const apiConfig = {
+  url: "https://nomoreparties.co/v1/wff-cohort-35/",
+  headers: {
+    authorization: '2c41fd0f-ee02-4fdc-a11f-a842e627ead5',
+    'Content-Type': 'application/json'
+  }
 }
 
 export { getInitialCards, 

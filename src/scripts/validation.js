@@ -13,8 +13,6 @@ function clearValidation(validationConfig, form) {
   const button = form.querySelector(validationConfig.submitButtonSelector);
   inputs.forEach((input) => {
     hideInputError(validationConfig, form, input);
-    button.disabled = true;
-    button.classList.add(validationConfig.inactiveButtonClass);
   });
   toggleButtonState(validationConfig, inputs, button);
 }
