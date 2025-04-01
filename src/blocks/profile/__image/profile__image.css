@@ -1,4 +1,5 @@
 .profile__image {
+  position: relative;
   width: 120px;
   height: 120px;
   -webkit-border-radius: 50%;
@@ -7,6 +8,35 @@
   background-size: cover;
   background-position: center;
   margin: 0 29px 0 0;
+}
+
+.profile__image-edit::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 47px;
+  left: 47px;
+  background-image: url("../../../images/change-avatar.svg");
+  width: 26px;
+  height: 26px;
+  background-size: cover;
+  background-position: center;
+}
+
+.profile__image-edit::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.8);
+  width: 120px;
+  height: 120px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
 }
 
 @media screen and (max-width: 740px) {

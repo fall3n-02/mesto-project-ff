@@ -49,7 +49,8 @@ function addNewCard(data) {
     },
     body: JSON.stringify({
       name: data.name,
-      link: data.link
+      link: data.link,
+      likes: []
     })
   })
     .then(handleResponse);
@@ -82,6 +83,21 @@ function deleteCardFromList(data) {
       authorization: '2c41fd0f-ee02-4fdc-a11f-a842e627ead5'
     }
   })
+    .then(handleResponse);
+}
+
+function changeAvatar(data) {
+  return fetch(`https://nomoreparties.co/v1/wff-cohort-35/users/me/avatar`, {
+    method: "PATCH",
+    headers: {
+      authorization: '2c41fd0f-ee02-4fdc-a11f-a842e627ead5',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      avatar: data
+    })
+  })
+    .then(handleResponse);
 }
 
 export { getInitialCards, 
@@ -90,5 +106,6 @@ export { getInitialCards,
   addNewCard, 
   likeCard,
   removeLikeFromCard,
-  deleteCardFromList
+  deleteCardFromList,
+  changeAvatar
 }

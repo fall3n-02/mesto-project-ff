@@ -2,10 +2,11 @@ import "./index.css";
 import { deleteCard, createCard, likeToogle } from "./scripts/card.js"
 import { openModal, closeModal } from "./scripts/modal.js"
 import { enableValidation, clearValidation } from "./scripts/validation.js";
-import { getInitialCards, getProfileInfo, setProfileInfo, addNewCard, likeCard, removeLikeFromCard, deleteCardFromList } from "./scripts/api.js";
+import { getInitialCards, getProfileInfo, setProfileInfo, addNewCard, likeCard, removeLikeFromCard, deleteCardFromList, changeAvatar } from "./scripts/api.js";
 
 const popupEditProfile = document.querySelector(".popup_type_edit");
 const popupNewPlace = document.querySelector(".popup_type_new-card");
+const popupNewAvatar = document.querySelector(".popup_type_change-avatar")
 const popupImage = document.querySelector(".popup_type_image");
 
 const popupImageImage = popupImage.querySelector(".popup__image");
@@ -19,9 +20,12 @@ const popups = document.querySelectorAll(".popup");
 
 const formProfile = document.forms["edit-profile"];
 const formNewPlace = document.forms["new-place"];
+const formNewAvatar = document.forms["change-avatar"];
 const profileNameEl = document.querySelector(".profile__title");
 const profileDescriptionEl = document.querySelector(".profile__description");
 const profileImage = document.querySelector(".profile__image");
+
+let myId = null;
 
 const validationConfig = {
   formSelector: '.popup__form',
@@ -35,26 +39,47 @@ const validationConfig = {
 function submitFormProfle(evt) {
   evt.preventDefault();
   uploadFormProfile(formProfile);
+  renderLoading(true, popupEditProfile);
   setProfileInfo({
     name: profileNameEl.textContent,
     about: profileDescriptionEl.textContent
   })
-  closeModal(popupEditProfile);
-  clearValidation(validationConfig, formProfile);
+    .finally(() => {
+      closeModal(popupEditProfile);
+      renderLoading(false, popupEditProfile);
+      clearValidation(validationConfig, formProfile);
+    })
 }
 
 function sumbitFormNewPlace(evt) {
   evt.preventDefault();
-  const newCard = {
+  let newCard = {
     name: formNewPlace.elements["place-name"].value,
     link: formNewPlace.elements.link.value
   }
-  placesList.prepend(createCard(newCard, deleteCard, likeToogle, openPopupImage, true));
-  addNewCard(newCard);
-  formNewPlace.reset();
-  closeModal(popupNewPlace);
-  clearValidation(validationConfig, formNewPlace)
+  renderLoading(true, formNewPlace)
+  addNewCard(newCard)
+    .then((res) => newCard = res)
+    .finally(() => {
+      renderLoading(false, formNewPlace);
+      placesList.prepend(createCard(newCard, deleteCard, likeToogle, openPopupImage, true, deleteCardFromList, likeCard, removeLikeFromCard, myId));
+      formNewPlace.reset();
+      closeModal(popupNewPlace);
+      clearValidation(validationConfig, formNewPlace)
+    })
 }
+
+function submitFormNewAvatar(evt) {
+  evt.preventDefault();
+  const link = formNewAvatar.querySelector(".popup__input").value;
+  renderLoading(true, popupNewAvatar);
+  changeAvatar(link)
+    .finally(() => {
+      renderLoading(false, popupNewAvatar)
+      closeModal(popupNewAvatar);
+      refreshAvatar(link);
+    });
+} 
 
 function loadFormProfile() {
   formProfile.elements.name.value = profileNameEl.textContent;
@@ -73,19 +98,34 @@ function openPopupImage(cardImage) {
   popupImageDescription.textContent = cardImage.alt;
 }
 
+function refreshAvatar(link) {
+  profileImage.style = `background-image: url('${link}'`;
+}
+
 function initiateData([profileInfo, cards]) {
   profileNameEl.textContent = profileInfo.name;
   profileDescriptionEl.textContent = profileInfo.about;
-  profileImage.src = profileInfo.avatar;
+  profileImage.style = `background-image: url('${profileInfo.avatar}'`;
+  myId = profileInfo._id;
   cards.forEach((card) => {
     const isCreatedByMyself = profileInfo._id === card.owner._id;
-    placesList.prepend(createCard(card, deleteCard, likeToogle, openPopupImage, isCreatedByMyself, deleteCardFromList, likeCard, removeLikeFromCard));
+    placesList.prepend(createCard(card, deleteCard, likeToogle, openPopupImage, isCreatedByMyself, deleteCardFromList, likeCard, removeLikeFromCard, myId));
   }
   )
-} 
+}
+
+function renderLoading(isLoadiing, popup) {
+  if (isLoadiing) {
+    popup.querySelector(".popup__button").textContent = "Сохраниение..."
+  } else {
+    popup.querySelector(".popup__button").textContent = "Сохранить"
+  }
+}
 
 Promise.all([getProfileInfo(), getInitialCards()])
   .then(initiateData)
+
+enableValidation(validationConfig);
 
 buttonOpenEditProfile.addEventListener("click", () => {
   loadFormProfile(popupEditProfile);
@@ -113,4 +153,19 @@ popups.forEach(function (popup) {
 formProfile.addEventListener("submit", submitFormProfle);
 formNewPlace.addEventListener("submit", sumbitFormNewPlace);
 
-enableValidation(validationConfig); 
+profileImage.addEventListener("mouseover", (evt) => {
+  profileImage.classList.add("profile__image-edit");
+  profileImage.classList.add("profile__image-edit");
+})
+
+profileImage.addEventListener("mouseout", (evt) => {
+  profileImage.classList.remove("profile__image-edit");
+  profileImage.classList.remove("profile__image-edit");
+})
+
+profileImage.addEventListener("click", (evt) => {
+  openModal(popupNewAvatar);
+  clearValidation(validationConfig, formProfile);
+})
+
+formNewAvatar.addEventListener("submit", submitFormNewAvatar);
