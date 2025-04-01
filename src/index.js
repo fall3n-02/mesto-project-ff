@@ -38,34 +38,40 @@ const validationConfig = {
 
 function submitFormProfle(evt) {
   evt.preventDefault();
-  uploadFormProfile(formProfile);
   renderLoading(true, popupEditProfile);
   setProfileInfo({
     name: profileNameEl.textContent,
     about: profileDescriptionEl.textContent
   })
-    .finally(() => {
+    .then((res) => {
+      uploadFormProfile(formProfile);
       closeModal(popupEditProfile);
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+    .finally(() => {
       renderLoading(false, popupEditProfile);
-      clearValidation(validationConfig, formProfile);
     })
 }
 
 function sumbitFormNewPlace(evt) {
   evt.preventDefault();
-  let newCard = {
+  const newCard = {
     name: formNewPlace.elements["place-name"].value,
     link: formNewPlace.elements.link.value
   }
   renderLoading(true, formNewPlace)
   addNewCard(newCard)
-    .then((res) => newCard = res)
+    .then((res) => {
+      placesList.prepend(createCard(res, deleteCard, likeToogle, openPopupImage, true, deleteCardFromList, likeCard, removeLikeFromCard, myId));
+      formNewPlace.reset();
+      clearValidation(validationConfig, formNewPlace);
+      closeModal(popupNewPlace);
+    })
+    .catch((err) => console.log(err))
     .finally(() => {
       renderLoading(false, formNewPlace);
-      placesList.prepend(createCard(newCard, deleteCard, likeToogle, openPopupImage, true, deleteCardFromList, likeCard, removeLikeFromCard, myId));
-      formNewPlace.reset();
-      closeModal(popupNewPlace);
-      clearValidation(validationConfig, formNewPlace)
     })
 }
 
@@ -74,10 +80,13 @@ function submitFormNewAvatar(evt) {
   const link = formNewAvatar.querySelector(".popup__input").value;
   renderLoading(true, popupNewAvatar);
   changeAvatar(link)
+    .then((res) => {
+      refreshAvatar(link);
+      closeModal(popupNewAvatar);
+    })
+    .catch((err) => console.log(err))
     .finally(() => {
       renderLoading(false, popupNewAvatar)
-      closeModal(popupNewAvatar);
-      refreshAvatar(link);
     });
 } 
 
@@ -109,7 +118,7 @@ function initiateData([profileInfo, cards]) {
   myId = profileInfo._id;
   cards.forEach((card) => {
     const isCreatedByMyself = profileInfo._id === card.owner._id;
-    placesList.prepend(createCard(card, deleteCard, likeToogle, openPopupImage, isCreatedByMyself, deleteCardFromList, likeCard, removeLikeFromCard, myId));
+    placesList.append(createCard(card, deleteCard, likeToogle, openPopupImage, isCreatedByMyself, deleteCardFromList, likeCard, removeLikeFromCard, myId));
   }
   )
 }
@@ -124,34 +133,18 @@ function renderLoading(isLoadiing, popup) {
 
 Promise.all([getProfileInfo(), getInitialCards()])
   .then(initiateData)
+  .catch((err) => console.log(err))
 
 enableValidation(validationConfig);
 
 buttonOpenEditProfile.addEventListener("click", () => {
   loadFormProfile(popupEditProfile);
   openModal(popupEditProfile);
-  clearValidation(validationConfig, formProfile);
 });
 
 buttonOpenNewPlace.addEventListener("click", () => {
   openModal(popupNewPlace);
-  clearValidation(validationConfig, formNewPlace);
 });
-
-popups.forEach(function (popup) {
-  popup.addEventListener("click", function (evt) {
-    if ((evt.target.classList.contains("popup__close")) || (evt.target.classList.contains("popup"))) {
-      closeModal(popup);
-      if (popup.classList.contains(".popup__form")) {
-        const form = popup.querySelector(".popup__form");
-        clearValidation(validationConfig, form)
-      }
-    }
-  });
-});
-
-formProfile.addEventListener("submit", submitFormProfle);
-formNewPlace.addEventListener("submit", sumbitFormNewPlace);
 
 profileImage.addEventListener("mouseover", (evt) => {
   profileImage.classList.add("profile__image-edit");
@@ -165,7 +158,16 @@ profileImage.addEventListener("mouseout", (evt) => {
 
 profileImage.addEventListener("click", (evt) => {
   openModal(popupNewAvatar);
-  clearValidation(validationConfig, formProfile);
 })
 
+popups.forEach(function (popup) {
+  popup.addEventListener("click", function (evt) {
+    if ((evt.target.classList.contains("popup__close")) || (evt.target.classList.contains("popup"))) {
+      closeModal(popup);
+    }
+  });
+});
+
+formProfile.addEventListener("submit", submitFormProfle);
+formNewPlace.addEventListener("submit", sumbitFormNewPlace);
 formNewAvatar.addEventListener("submit", submitFormNewAvatar);

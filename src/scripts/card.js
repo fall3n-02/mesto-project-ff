@@ -22,25 +22,32 @@ function createCard(card, deleteCard, likeToogle, openPopupImage, isCreatedByMys
   }
 
   buttonLike.addEventListener("click", (evt) => {
-    likeToogle(evt.target);
+    console.log(card);
     if (buttonLike.classList.contains("card__like-button_is-active")) {
-      likeCard(card)
-        .then((res) => {
-          refreshLikes(res, cardLikeCount);
-        });
-    } else {
       removeLikeFromCard(card)
         .then((res) => {
+          likeToogle(evt.target);
           refreshLikes(res, cardLikeCount);
+          console.log(res);
         })
+        .catch((err) => console.log(err))
+    } else {
+      likeCard(card)
+        .then((res) => {
+          likeToogle(evt.target);
+          refreshLikes(res, cardLikeCount);
+          console.log(res);
+        })
+        .catch((err) => console.log(err))
     }
   });
 
   cardImage.addEventListener("click", (evt) => openPopupImage(evt.target));
 
   buttonDelete.addEventListener("click", () => {
-    deleteCardFromList(card);
-    deleteCard(cardElement);
+    deleteCardFromList(card)
+      .then(() => deleteCard(cardElement))
+      .catch((err) => console.log(err))
   });
 
   return cardElement;
@@ -52,11 +59,7 @@ function deleteCard(cardElement) {
 }
 
 function likeToogle(buttonLike) {
-  if (buttonLike.classList.contains("card__like-button_is-active")) {
-    buttonLike.classList.remove("card__like-button_is-active");
-  } else {
-    buttonLike.classList.add("card__like-button_is-active");
-  }
+  buttonLike.classList.toggle("card__like-button_is-active");
 }
 
 function isCardLiked(card, myId) {

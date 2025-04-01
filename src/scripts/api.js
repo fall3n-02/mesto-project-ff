@@ -1,7 +1,9 @@
 function getProfileInfo() {
   return fetch(`${apiConfig.url}users/me`, {
     method: "GET",
-    headers: apiConfig.headers
+    headers: {
+      authorization: apiConfig.headers.authorization
+    }
   })
     .then(handleResponse);
 }
@@ -9,7 +11,9 @@ function getProfileInfo() {
 function getInitialCards() {
   return fetch(`${apiConfig.url}cards`, {
     method: "GET",
-    headers: apiConfig.headers
+    headers: {
+      authorization: apiConfig.headers.authorization
+    }
   })
     .then(handleResponse);
 }
@@ -49,7 +53,9 @@ function addNewCard(data) {
 function likeCard(data) {
   return fetch(`${apiConfig.url}cards/likes/${data._id}`, {
     method: 'PUT',
-    headers: apiConfig.headers
+    headers: {
+      authorization: apiConfig.headers.authorization
+    }
   })
     .then(handleResponse);
 }
@@ -57,7 +63,9 @@ function likeCard(data) {
 function removeLikeFromCard(data) {
   return fetch(`${apiConfig.url}cards/likes/${data._id}`, {
     method: 'DELETE',
-    headers: apiConfig.headers
+    headers: {
+      authorization: apiConfig.headers.authorization
+    }
   })
     .then(handleResponse);
 }
@@ -65,7 +73,9 @@ function removeLikeFromCard(data) {
 function deleteCardFromList(data) {
   return fetch(`${apiConfig.url}cards/${data._id}`, {
     method: "DELETE",
-    headers: apiConfig.headers
+    headers: {
+      authorization: apiConfig.headers.authorization
+    }
   })
     .then(handleResponse);
 }
