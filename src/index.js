@@ -64,7 +64,7 @@ function sumbitFormNewPlace(evt) {
   renderLoading(true, formNewPlace)
   addNewCard(newCard)
     .then((res) => {
-      placesList.prepend(createCard(res, deleteCard, likeToogle, openPopupImage, true, deleteCardFromList, likeCard, removeLikeFromCard, myId));
+      placesList.prepend(createCard(res, deleteCard, likeToogle, openPopupImage, deleteCardFromList, likeCard, removeLikeFromCard, myId, res.owner._id));
       formNewPlace.reset();
       clearValidation(validationConfig, formNewPlace);
       closeModal(popupNewPlace);
@@ -117,8 +117,7 @@ function initiateData([profileInfo, cards]) {
   profileImage.style = `background-image: url('${profileInfo.avatar}'`;
   myId = profileInfo._id;
   cards.forEach((card) => {
-    const isCreatedByMyself = profileInfo._id === card.owner._id;
-    placesList.append(createCard(card, deleteCard, likeToogle, openPopupImage, isCreatedByMyself, deleteCardFromList, likeCard, removeLikeFromCard, myId));
+    placesList.append(createCard(card, deleteCard, likeToogle, openPopupImage, deleteCardFromList, likeCard, removeLikeFromCard, myId, card.owner._id));
   }
   )
 }

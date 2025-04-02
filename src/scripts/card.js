@@ -1,4 +1,5 @@
-function createCard(card, deleteCard, likeToogle, openPopupImage, isCreatedByMyself, deleteCardFromList, likeCard, removeLikeFromCard, myId) {
+function createCard(card, deleteCard, likeToogle, openPopupImage, deleteCardFromList, likeCard, removeLikeFromCard, myId, cardId) {
+  const isCreatedByMyself = myId === cardId;
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const buttonDelete = cardElement.querySelector(".card__delete-button");
@@ -54,8 +55,7 @@ function createCard(card, deleteCard, likeToogle, openPopupImage, isCreatedByMys
 }
 
 function deleteCard(cardElement) {
-  const cardToRemove = cardElement.closest(".card");
-  cardToRemove.remove();
+  cardElement.remove();
 }
 
 function likeToogle(buttonLike) {
