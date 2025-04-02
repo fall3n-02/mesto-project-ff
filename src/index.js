@@ -140,6 +140,7 @@ enableValidation(validationConfig);
 buttonOpenEditProfile.addEventListener("click", () => {
   loadFormProfile(popupEditProfile);
   openModal(popupEditProfile);
+  clearValidation(validationConfig, formProfile);
 });
 
 buttonOpenNewPlace.addEventListener("click", () => {
